@@ -1,10 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
+import { connect } from "../FinTech-Server/config/dbconnection.js";
 dotenv.config();
 
 const app = express();
-const port = 5000;
 
-app.listen(port, () => {
-  console.log(`server is running on port ${port}`);
+app.listen(process.env.PORT, () => {
+  connect();
+  console.log(`server is running on port ${process.env.PORT}`);
 });

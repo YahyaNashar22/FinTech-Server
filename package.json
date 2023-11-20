@@ -1,12 +1,12 @@
 {
   "name": "finetech-server",
-  "type":"module",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"npm start"
+    "start": "npm start"
   },
   "keywords": [],
   "author": "",
@@ -24,7 +24,11 @@
     "mongose": "^0.0.2-security",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.6.3",
     "nodemon": "^3.0.1",
+    "sequelize": "^6.35.1",
+    "sequelize-cli": "^6.6.2",
     "wjt": "^1.0.0"
   }
 }
