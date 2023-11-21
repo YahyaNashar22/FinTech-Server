@@ -4,8 +4,14 @@ import cors from "cors";
 import { connect } from "../FinTech-Server/config/dbconnection.js";
 dotenv.config();
 
+import UserRoutes from "./routes/UsersRoutes.js";
+
 const app = express();
 app.use(cors());
+app.use(express.json());
+
+//routes
+app.use("/users", UserRoutes);
 
 app.listen(process.env.PORT, () => {
   connect();
