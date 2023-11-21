@@ -10,9 +10,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-//routes
-app.use("/users", UserRoutes);
-
 app.listen(process.env.PORT, () => {
   connect();
   console.log(`server is running on port ${process.env.PORT}`);
