@@ -1,5 +1,4 @@
-import controllers from "../controllers/UsersController.cjs";
-const { createUser, getUsers } = controllers;
+import { createUser, getUsers } from "../controllers/UsersController.js";
 import express from "express";
 const router = express.Router();
 
