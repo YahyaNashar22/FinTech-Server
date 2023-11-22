@@ -1,10 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { connect } from "../FinTech-Server/config/dbconnection.js";
+import { connect } from "./config/dbconnection.js";
 dotenv.config();
 
-import UserRoutes from "./routes/UsersRoutes.js";
+// import UserRoutes from "./routes/UsersRoutes.js";
 
 const app = express();
 app.use(cors());
