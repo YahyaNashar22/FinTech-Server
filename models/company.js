@@ -14,15 +14,48 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Company.init({
-    Name: DataTypes.STRING,
-    Description: DataTypes.STRING,
-    Logo: DataTypes.STRING,
-    Capital: DataTypes.INTEGER,
-    Updated_Captial: DataTypes.INTEGER,
-    Address: DataTypes.STRING,
-    Social_Media: DataTypes.JSON,
-    Phone_Number: DataTypes.INTEGER,
-    Website: DataTypes.STRING
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    Name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    Description: {
+      type: DataTypes.STRING,
+    },
+    Logo: {
+      type: DataTypes.STRING,
+    },
+    Capital: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    Updated_Capital: {
+      type: DataTypes.INTEGER,
+    },
+    Address: {
+      type: DataTypes.STRING,
+    },
+    Social_Media: {
+      type: DataTypes.JSON,
+    },
+    Phone_Number: {
+      type: DataTypes.INTEGER,
+    },
+    Website: {
+      type: DataTypes.STRING,
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+    }
   }, {
     sequelize,
     modelName: 'Company',
