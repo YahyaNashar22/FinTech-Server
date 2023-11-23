@@ -1,16 +1,3 @@
-// "use strict";
-
-// export default (sequelize, DataTypes) => {
-//   const Users = sequelize.define("Users", {
-//     Name: DataTypes.STRING,
-//     Email: DataTypes.STRING,
-//     Password: DataTypes.STRING,
-//     Role: DataTypes.STRING,
-//     Picture: DataTypes.STRING,
-//   });
-//   return Users;
-// };
-
 import { Sequelize } from "sequelize";
 import sequelize from "../config/dbconnection.js";
 
