@@ -1,31 +1,30 @@
-"use strict";
-const { Model } = require("sequelize");
-module.exports = (sequelize, DataTypes) => {
-  class Transactions extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-      
+'use strict';
+import { Sequelize } from "sequelize";
+import sequelize from "../config/dbconnection.js";
 
-    }
-  }
-  Transactions.init(
-    {
-      Title: DataTypes.STRING,
-      Type: DataTypes.BOOLEAN,
-      Date: DataTypes.DATE,
-      Value: DataTypes.INTEGER,
-      Category_ID: DataTypes.INTEGER,
-      UserID: DataTypes.INTEGER,
-    },
-    {
-      sequelize,
-      modelName: "Transactions",
-    }
-  );
-  return Transactions;
-};
+const Transactions = sequelize.define("Transactions", {
+  id: {
+    type:Sequelize.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    allowNull: false,
+  },
+  title: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  type: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+  },
+  Date: {
+    type:Sequelize.DATE,
+    allowNull: false,
+  },
+  value: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  },
+});
+
+export default Transactions;
