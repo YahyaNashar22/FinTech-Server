@@ -8,6 +8,7 @@ import UserRoutes from "./routes/UsersRoutes.js";
 import TransactionsRoutes from "./routes/TransactionsRoutes.js";
 import CompanyRoutes from "./routes/CompanyRoutes.js";
 import CategoriesRoutes from "./routes/CategoriesRoutes.js";
+import "./config/association.js";
 
 const app = express();
 app.use(cors());
@@ -23,6 +24,3 @@ app.listen(process.env.PORT, () => {
   setTimeout(syncronise, 7000);
   console.log(`server is running on port ${process.env.PORT}`);
 });
-
-// Users.hasMany(Transactions, { foreignKey: "UserID" });
-// // Categories.hasMany(Transactions , { foreignKey: 'CategoriesId' });

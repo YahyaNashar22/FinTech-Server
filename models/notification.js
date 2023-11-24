@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 import { Sequelize } from "sequelize";
 import sequelize from "../config/dbconnection.js";
 
-const  Notification = sequelize.define("Notification", {
+const Notification = sequelize.define("Notification", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -17,11 +17,6 @@ const  Notification = sequelize.define("Notification", {
     type: Sequelize.DATE,
     allowNull: false,
   },
-  TransactionID: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-  },
-   
 });
 
 export default Notification;
