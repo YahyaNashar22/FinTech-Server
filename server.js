@@ -4,13 +4,17 @@ import cors from "cors";
 import { connect } from "./config/dbconnection.js";
 dotenv.config();
 
-// import UserRoutes from "./routes/UsersRoutes.js";
+import UserRoutes from "./routes/UsersRoutes.js";
+import CategoriesRoutes from "./routes/CategoriesRoutes.js";
+import CompanyRoutes from "./routes/CompanyRoutes.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.use("/users", UserRoutes);
+app.use("/categories", CategoriesRoutes);
+app.use("company", CompanyRoutes);
 
 // syncronise();
 app.listen(process.env.PORT, () => {
