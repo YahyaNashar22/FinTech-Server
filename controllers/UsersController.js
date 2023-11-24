@@ -42,15 +42,31 @@ export const getOne = async (req, res, next) => {
 // Update user
 
 export const updateUser = async (req, res, next) => {
+  const id = req.params.id;
   try {
-    const { Name, Email, Password, Role } = req.body;
-    await Users.update({ Name, Email, Password, Role }),
+    const { Name, Email, Password } = req.body;
+    await Users.update(
+      { Name, Email, Password },
       {
-        where: { Name: req.body },
-      };
+        where: { id },
+      }
+    );
     return res.status(200).json({ message: "user updated successfully" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Trouble updating user info" });
+  }
+};
+
+// Delete user
+
+export const deleteUser = async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    await Users.destroy({ where: { id } });
+    res.status(200).json({ message: "user deleted successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: " could not delete user" });
   }
 };
