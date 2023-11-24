@@ -13,10 +13,20 @@ const sequelize = new Sequelize(
 
 export const connect = async () => {
   try {
-    await sequelize.authenticate();
+    await sequelize.authenticate({ force: true });
     console.log("Connection has been established successfully.");
   } catch (error) {
     console.log("Unable to connect to database", error);
+  }
+};
+
+export const syncronise = async () => {
+  try {
+    await sequelize.sync({ force: true }).then((result) => {
+      onslotchange.log(result);
+    });
+  } catch (err) {
+    console.log(err);
   }
 };
 

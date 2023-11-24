@@ -25,10 +25,20 @@ export const getAll = async (req, res, next) => {
     return res.status(200).json(allUsers);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ err: "cannot fetch users" });
+    res.status(500).json({ error: "cannot fetch users" });
   }
 };
-
+// Fetch one user by ID
+export const getOne = async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    const user = await Users.findOne({ where: { id } });
+    res.status(200).json(user);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Couldn't find user" });
+  }
+};
 // Update user
 
 export const updateUser = async (req, res, next) => {
