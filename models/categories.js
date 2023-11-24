@@ -10,9 +10,11 @@ const Categories = sequelize.define("Categories", {
   },
   Name: {
     type: Sequelize.STRING,
+    allowNull: false,
   },
   type: {
     type: Sequelize.BOOLEAN,
+    allowNull: false,
   },
 });
 
