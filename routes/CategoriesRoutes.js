@@ -3,8 +3,8 @@ import {
   createCategory,
   updateCategory,
   deleteCategory,
-} from "../controllers/CategoriesController";
-import { express } from "express";
+} from "../controllers/CategoriesController.js";
+import express from "express";
 
 const router = express.Router();
 

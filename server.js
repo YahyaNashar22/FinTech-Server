@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { connect } from "./config/dbconnection.js";
+import { connect, syncronise } from "./config/dbconnection.js";
 dotenv.config();
 
 import UserRoutes from "./routes/UsersRoutes.js";
