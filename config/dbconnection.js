@@ -22,8 +22,8 @@ export const connect = async () => {
 
 export const syncronise = async () => {
   try {
-    await sequelize.sync({ force: true }).then((result) => {
-      onslotchange.log(result);
+    await sequelize.sync({ alter: true }).then((result) => {
+      console.log(result);
     });
   } catch (err) {
     console.log(err);
