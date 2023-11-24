@@ -10,7 +10,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       Name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       Description: {
         type: Sequelize.STRING
@@ -19,7 +20,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       Capital: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       Updated_Captial: {
         type: Sequelize.INTEGER
