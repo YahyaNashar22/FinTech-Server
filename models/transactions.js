@@ -25,6 +25,24 @@ const Transactions = sequelize.define("Transactions", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
+  CategoryID: {
+    type: Sequelize.INTEGER,
+    allowNull:false,
+    references: {
+      model: 'Categories', // name of the referenced model
+      key: 'id', // name of the referenced key
+    },
+    unique:false,
+  },
+  UserID: {
+    type: Sequelize.INTEGER,
+    allowNull:false,
+    references: {
+      model: 'Users', // name of the referenced model
+      key: 'id', // name of the referenced key
+    },
+    unique:false,
+  },
 });
 
 export default Transactions;

@@ -1,26 +1,63 @@
 import Transactions from "../models/transactions.js";
+import Categories from "../models/categories.js";
+import Users from "../models/users.js";
 
-  // Create a new transaction
-export const createTransaction = async (req, res) => {
-    try {
-      const transaction = await Transactions.create(req.body);
-      res.status(201).json(transaction);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  };
+ // CREATE NEW TRANSACTIONS 
+ export const CreatTransaction = async (req,res)=>{
+  const{title,type,Date,value,UserID,CategoryID}=req.body;
+  try{
+      const newtrans=await Transactions.create({
+          title,
+          type,
+          Date,
+          value,
+          UserID,
+          CategoryID
+          
+      });
   
-  // Get all transactions
-  export const getAllTransactions = async (req, res) => {
-    try {
-      const transactions = await Transactions.findAll();
-      res.status(200).json(transactions);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+       res.status(200).json({message:"transaction created successfully", transaction:newtrans})
+
+
+  }
+  catch (err) {
+      console.log(err);
+      res.status(500).json({ error: "transaction couldn't be created" });
     }
-  };
+}
+ 
+
+
+//get+pagination
+
+
+  
+ 
+
+export const getAllTransactions = async (req, res) => {
+  try {
+    const page = req.query.page || 1; // default to page 1
+    const pageSize = 5; // limit to 5 transactions
+    const offset = (page - 1) * pageSize;
+
+    const transactions = await Transactions.findAll({
+      limit: pageSize,
+      offset: offset,
+    });
+
+    res.status(200).json(transactions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+  
+ 
+
+
+
+
+
   
   // Get a specific transaction by ID
   export const getTransactionById = async (req, res) => {
@@ -74,26 +111,27 @@ export const createTransaction = async (req, res) => {
 
 
 
-  //CREATE NEW TRANSACTIONS 
-// export const CreatTransaction = async (req,res)=>{
-//     const{title,type,Date,value}=req.body;
-//     try{
-//         const newtrans=await Transactions.create({
-//             title,
-//             type,
-//             Date,
-//             value,
-            
-//         });
-//         return res.status(200).json({message:"transaction created successfully", transaction:newtrans})
+ 
+// export const CreatTransaction = async (req, res) => {
+//   try {
+//     const { title, type, Date, value, UserId, categoryId } = req.body;
 
+//     // Create a new transaction
+//     const newTransaction = await Transactions.create({
+//       title,
+//       type,
+//       Date, // 'Date' is a reserved keyword, so use the uppercase 'Date'
+//       value,
+//       UserId, // Assuming your foreign key for user is named 'UserId'
+//       CategoryId: categoryId, // Assuming your foreign key for category is named 'CategoryId'
+//     });
 
-//     }
-//     catch (err) {
-//         console.log(err);
-//         res.status(500).json({ error: "transaction couldn't be created" });
-//       }
-// }
+//     res.status(201).json({ message: 'Transaction added successfully', data: newTransaction });
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
+
 
 
 
@@ -123,3 +161,30 @@ export const createTransaction = async (req, res) => {
 //       res.status(500).json({ error: "Trouble updating transaction info" });
 //     }
 //   };
+ // export const getAllTransactions = async (req, res) => {
+  //   try {
+  //     const transactions = await Transactions.findAll();
+  //     include: [Categories, Users ]
+
+  //     res.status(200).json(transactions);
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).json({ error: 'Internal Server Error' });
+  //   }
+  // };
+
+
+
+
+   // Create a new transaction
+// export const createTransaction = async (req, res) => {
+//     try {
+//       const transaction = await Transactions.create(req.body);
+//       res.status(201).json(transaction);
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ error: 'Internal Server Error' });
+//     }
+//   };
+  
+  // Get all transactions
