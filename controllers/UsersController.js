@@ -9,6 +9,7 @@ export const createUser = async (req, res, next) => {
       Email,
       Password,
       Role,
+      Picture: req.file.filename,
     });
     return res
       .status(200)
@@ -43,10 +44,11 @@ export const getOne = async (req, res, next) => {
 
 export const updateUser = async (req, res, next) => {
   const id = req.params.id;
+  req.body.image = req.file.path;
   try {
     const { Name, Email, Password } = req.body;
     await Users.update(
-      { Name, Email, Password },
+      { Name, Email, Password, Picture: req.file.filename },
       {
         where: { id },
       }
