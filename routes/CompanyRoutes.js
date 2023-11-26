@@ -1,13 +1,16 @@
 import express from "express";
 import {
+  createCompanyInfo,
   getCompanyInfo,
   updateCompanyInfo,
 } from "../controllers/CompanyController.js";
 
 const router = express.Router();
 
-router.get("/companyInfo", getCompanyInfo); // Route to get the company Info
+router.post("/create", createCompanyInfo); // Route To create the company info
 
-router.put("/companyInfo", updateCompanyInfo); // Route to update the company Info
+router.get("/info", getCompanyInfo); // Route to get the company Info
+
+router.put("/update", updateCompanyInfo); // Route to update the company Info
 
 export default router;

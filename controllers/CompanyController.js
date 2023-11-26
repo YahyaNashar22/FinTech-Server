@@ -1,5 +1,40 @@
 import Company from "../models/company.js";
 
+// To create a company info
+
+export const createCompanyInfo = async (req, res) => {
+  const { 
+    Name,
+    Logo,
+    Description,
+    Capital,
+    Updated_Capital,
+    Address,
+    Social_Media,
+    Phone_Number,
+    Website 
+  } = req.body;
+
+  try {
+    const newCompanyInfo = await Company.create({ 
+      Name,
+      Logo,
+      Description,
+      Capital,
+      Updated_Capital,
+      Address,
+      Social_Media,
+      Phone_Number,
+      Website 
+    });
+
+    res.status(201).json({ success: true, data: newCompanyInfo });
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Server Error" });
+  }
+};
+
+// To get company Info
 export const getCompanyInfo = async (req, res) => {
   try {
     const companyInfo = await Company.findOne(); // Use Sequelize's findOne method
@@ -14,15 +49,17 @@ export const getCompanyInfo = async (req, res) => {
   }
 };
 
+// To update company Info
 export const updateCompanyInfo = async (req, res) => {
   const {
     Name,
     Logo,
     Description,
     Capital,
+    Updated_Capital,
     Address,
-    SocialMedia,
-    PhoneNumber,
+    Social_Media,
+    Phone_Number,
     Website,
   } = req.body;
 
@@ -38,9 +75,10 @@ export const updateCompanyInfo = async (req, res) => {
       Logo,
       Description,
       Capital,
+      Updated_Capital,
       Address,
-      SocialMedia,
-      PhoneNumber,
+      Social_Media,
+      Phone_Number,
       Website,
     });
 
