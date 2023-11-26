@@ -15,4 +15,6 @@ Categories.hasMany(Transactions, {
   onUpdate: "CASCADE",
 });
 
-Transactions.hasOne(Notifications, { foreignKey: "TransactionID" });
+Transactions.hasOne(Notifications, { 
+  foreignKey: "TransactionID"
+});

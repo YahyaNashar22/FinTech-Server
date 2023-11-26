@@ -2,7 +2,7 @@
 import { Sequelize } from "sequelize";
 import sequelize from "../config/dbconnection.js";
 
-const Notification = sequelize.define("Notification", {
+const Notifications = sequelize.define("Notifications", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -19,4 +19,4 @@ const Notification = sequelize.define("Notification", {
   },
 });
 
-export default Notification;
+export default Notifications;

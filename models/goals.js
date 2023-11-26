@@ -21,7 +21,7 @@ const  Goals = sequelize.define("Goals", {
     type: Sequelize.DATE,
     allowNull: false,
   },
-  End_Dat: {
+  End_Date: {
     type: Sequelize.DATE,
     allowNull: false,
   },
