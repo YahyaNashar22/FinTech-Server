@@ -10,8 +10,8 @@ export const createCompanyInfo = async (req, res) => {
     Capital,
     Updated_Capital,
     Address,
-    SocialMedia,
-    PhoneNumber,
+    Social_Media,
+    Phone_Number,
     Website 
   } = req.body;
 
@@ -23,8 +23,8 @@ export const createCompanyInfo = async (req, res) => {
       Capital,
       Updated_Capital,
       Address,
-      SocialMedia,
-      PhoneNumber,
+      Social_Media,
+      Phone_Number,
       Website 
     });
 
@@ -58,8 +58,8 @@ export const updateCompanyInfo = async (req, res) => {
     Capital,
     Updated_Capital,
     Address,
-    SocialMedia,
-    PhoneNumber,
+    Social_Media,
+    Phone_Number,
     Website,
   } = req.body;
 
@@ -77,8 +77,8 @@ export const updateCompanyInfo = async (req, res) => {
       Capital,
       Updated_Capital,
       Address,
-      SocialMedia,
-      PhoneNumber,
+      Social_Media,
+      Phone_Number,
       Website,
     });
 
