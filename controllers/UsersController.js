@@ -1,5 +1,7 @@
 import Users from "../models/users.js";
 import bcryptjs from "bcryptjs";
+import cookieParser from "cookie-parser";
+import createToken from "../middlewares/token.js";
 
 // Create new user
 export const createUser = async (req, res, next) => {
@@ -14,6 +16,8 @@ export const createUser = async (req, res, next) => {
       Role,
       Picture: req.file.filename,
     });
+    const token = createToken(newUser.id);
+    res.cookie("jwt", token);
     return res
       .status(200)
       .json({ message: "user created successfully", user: newUser });
