@@ -3,7 +3,7 @@
 import express from "express";
 
 import {
-  createTransaction,
+  CreatTransaction,
   getAllTransactions,
   getTransactionById,
   updateTransactionById,
@@ -13,7 +13,7 @@ import {
 const router = express.Router();
 
 // Use the functions in your routes or wherever needed
-router.post("/create", createTransaction);
+router.post("/create",CreatTransaction);
 router.get("/read", getAllTransactions);
 router.get("/read/:id", getTransactionById);
 router.put("/update/:id", updateTransactionById);
