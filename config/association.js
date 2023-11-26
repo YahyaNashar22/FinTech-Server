@@ -7,16 +7,12 @@ Users.hasMany(Transactions, {
   foreignKey: "UserID",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
-  
 });
-
 
 Categories.hasMany(Transactions, {
   foreignKey: "CategoryID",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-
-
 
 Transactions.hasOne(Notifications, { foreignKey: "TransactionID" });
