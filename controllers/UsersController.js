@@ -1,13 +1,16 @@
 import Users from "../models/users.js";
+import bcryptjs from "bcryptjs";
 
 // Create new user
 export const createUser = async (req, res, next) => {
-  const { Name, Email, Password, Role } = req.body;
+  const { Name, Email, Role } = req.body;
+  const salt = await bcryptjs.genSalt();
+  const hashedPassword = await bcryptjs.hash(req.body.Password, salt);
   try {
     const newUser = await Users.create({
       Name,
       Email,
-      Password,
+      hashedPassword,
       Role,
       Picture: req.file.filename,
     });
@@ -45,10 +48,12 @@ export const getOne = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
   const id = req.params.id;
   req.body.image = req.file.path;
+  const salt = await bcryptjs.genSalt();
+  const hashedPassword = await bcryptjs.hash(req.body.Password, salt);
   try {
-    const { Name, Email, Password } = req.body;
+    const { Name, Email } = req.body;
     await Users.update(
-      { Name, Email, Password, Picture: req.file.filename },
+      { Name, Email, Password: hashedPassword, Picture: req.file.filename },
       {
         where: { id },
       }
