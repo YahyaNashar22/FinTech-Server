@@ -8,7 +8,7 @@ import UserRoutes from "./routes/UsersRoutes.js";
 import TransactionsRoutes from "./routes/TransactionsRoutes.js";
 import CompanyRoutes from "./routes/CompanyRoutes.js";
 import CategoriesRoutes from "./routes/CategoriesRoutes.js";
-
+import NotificationRoutes from './routes/NotificationsRoutes.js'
 import GoalRouter from "./routes/GoalsRoutes.js"
 
 import "./config/association.js";
@@ -22,6 +22,7 @@ app.use("/transactions", TransactionsRoutes);
 app.use("/company", CompanyRoutes);
 app.use("/categories", CategoriesRoutes);
 app.use("/goals", GoalRouter);
+app.use("/Notifications",NotificationRoutes)
 
 app.listen(process.env.PORT, () => {
   setTimeout(connect, 7000);

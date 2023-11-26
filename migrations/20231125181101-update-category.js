@@ -3,10 +3,10 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     // Drop the foreign key constraint for CategoryID first
-    await queryInterface.removeConstraint('Transactions', 'Transactions_ibfk_1');
+    // await queryInterface.removeConstraint('Transactions', 'Transactions_ibfk_1');
 
     // Drop the existing index on the CategoryID field
-    await queryInterface.removeIndex('Transactions', 'CategoryID');
+    // await queryInterface.removeIndex('Transactions', 'CategoryID');
 
     // Now, you can safely drop the index or make other changes
     // ...
