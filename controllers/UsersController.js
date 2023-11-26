@@ -22,6 +22,32 @@ export const createUser = async (req, res, next) => {
     res.status(500).json({ error: "user couldn't be created" });
   }
 };
+
+//login fct
+export const login = async (req, res, next) => {
+  const user = await Users.findOne({ where: { Email: req.body.Email } });
+  if (!user) {
+    return res.status(400).json({
+      error: "404",
+      message: "user not found",
+    });
+  } else {
+    try {
+      if (await bcryptjs.compare(req.body.password, user.password)) {
+        return res.status(200).json({ message: "login successfull" });
+      } else {
+        res.status(500).json({
+          message: "wrong password",
+        });
+      }
+    } catch {
+      res.status(500).json({
+        message: "something went wrong",
+      });
+    }
+  }
+};
+
 // Fetch all users
 export const getAll = async (req, res, next) => {
   try {
