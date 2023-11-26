@@ -63,3 +63,9 @@ export const deleteGoal = async (req, res) => {
         res.status(404).json({error: "Couldn't find Goal"})
     }
 }
+// {
+//     "Value": 20000,
+//     "Status": true,
+//     "Start_Date": "12/1/2000",
+//     "End_Date": "12/12/2000"
+// }
