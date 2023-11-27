@@ -16,3 +16,4 @@ Categories.hasMany(Transactions, {
 });
 
 Transactions.hasOne(Notifications, { foreignKey: "TransactionID" });
+Notifications.belongsTo(Transactions, { foreignKey: "TransactionID" });
