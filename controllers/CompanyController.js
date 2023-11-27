@@ -5,7 +5,6 @@ import Company from "../models/company.js";
 export const createCompanyInfo = async (req, res) => {
   const { 
     Name,
-    Logo,
     Description,
     Capital,
     Updated_Capital,
@@ -18,7 +17,7 @@ export const createCompanyInfo = async (req, res) => {
   try {
     const newCompanyInfo = await Company.create({ 
       Name,
-      Logo,
+      Logo: req.file.filename,
       Description,
       Capital,
       Updated_Capital,
@@ -30,6 +29,7 @@ export const createCompanyInfo = async (req, res) => {
 
     res.status(201).json({ success: true, data: newCompanyInfo });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ success: false, error: "Server Error" });
   }
 };
@@ -45,6 +45,7 @@ export const getCompanyInfo = async (req, res) => {
     }
     res.status(200).json({ success: true, data: companyInfo });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ success: false, error: "Server Error" });
   }
 };
@@ -53,7 +54,6 @@ export const getCompanyInfo = async (req, res) => {
 export const updateCompanyInfo = async (req, res) => {
   const {
     Name,
-    Logo,
     Description,
     Capital,
     Updated_Capital,
@@ -63,6 +63,7 @@ export const updateCompanyInfo = async (req, res) => {
     Website,
   } = req.body;
 
+  req.body.logo = req.file.path;
   try {
     let companyInfo = await Company.findOne();
     if (!companyInfo) {
@@ -72,7 +73,7 @@ export const updateCompanyInfo = async (req, res) => {
     }
     companyInfo = await companyInfo.update({
       Name,
-      Logo,
+      Logo: req.file ? req.file.filename : companyInfo.Logo,
       Description,
       Capital,
       Updated_Capital,
@@ -84,6 +85,7 @@ export const updateCompanyInfo = async (req, res) => {
 
     res.status(200).json({ success: true, data: companyInfo });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ success: false, error: "Error" });
   }
 };
