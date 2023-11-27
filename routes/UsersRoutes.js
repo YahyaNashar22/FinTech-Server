@@ -8,14 +8,15 @@ import {
 } from "../controllers/UsersController.js";
 import express from "express";
 import uploadImage from "../middlewares/multer.js";
+import authorized from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
 router.get("/getAll", getAll);
 router.get("/:id", getOne);
-router.post("/create", uploadImage.single("image"), createUser);
+router.post("/create", uploadImage.single("Picture"), createUser);
 router.post("/login", login);
-router.put("/:id", uploadImage.single("image"), updateUser);
+router.put("/:id", uploadImage.single("Picture"), updateUser);
 router.delete("/:id", deleteUser);
 
 export default router;

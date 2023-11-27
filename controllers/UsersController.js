@@ -1,20 +1,24 @@
 import Users from "../models/users.js";
 import bcryptjs from "bcryptjs";
-import cookieParser from "cookie-parser";
 import createToken from "../middlewares/token.js";
 
 // Create new user
 export const createUser = async (req, res, next) => {
-  const { Name, Email, Role } = req.body;
+  const { Name, Email, Password, Role } = req.body;
+  // const newX = req.body;
+  const profilePicture = req.body.file;
+  // newX.image = profilePicture;
   const salt = await bcryptjs.genSalt();
-  const hashedPassword = await bcryptjs.hash(req.body.Password, salt);
+  const hashedPassword = await bcryptjs.hash(Password, salt);
   try {
     const newUser = await Users.create({
       Name,
       Email,
-      hashedPassword,
+      Password: hashedPassword,
       Role,
-      Picture: req.file.filename,
+      Picture: profilePicture,
+      // ...newX,
+      // Password: hashedPassword,
     });
     const token = createToken(newUser.id);
     res.cookie("jwt", token);
@@ -37,8 +41,10 @@ export const login = async (req, res, next) => {
     });
   } else {
     try {
-      if (await bcryptjs.compare(req.body.password, user.password)) {
-        return res.status(200).json({ message: "login successfull" });
+      if (await bcryptjs.compare(req.body.password, user.hashedPassword)) {
+        return res
+          .status(200)
+          .json({ message: "login successfull", user: user });
       } else {
         res.status(500).json({
           message: "wrong password",

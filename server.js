@@ -12,11 +12,13 @@ import CategoriesRoutes from "./routes/CategoriesRoutes.js";
 import GoalRouter from "./routes/GoalsRoutes.js";
 
 import "./config/association.js";
+import authorized from "./middlewares/authMiddleware.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static("images"));
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/users", UserRoutes);
 app.use("/transactions", TransactionsRoutes);

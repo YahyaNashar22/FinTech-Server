@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 import { Sequelize } from "sequelize";
 import sequelize from "../config/dbconnection.js";
 
 const Transactions = sequelize.define("Transactions", {
   id: {
-    type:Sequelize.INTEGER,
+    type: Sequelize.INTEGER,
     autoIncrement: true,
     primaryKey: true,
     allowNull: false,
@@ -18,7 +18,7 @@ const Transactions = sequelize.define("Transactions", {
     allowNull: false,
   },
   Date: {
-    type:Sequelize.DATE,
+    type: Sequelize.DATE,
     allowNull: false,
   },
   value: {
@@ -27,21 +27,21 @@ const Transactions = sequelize.define("Transactions", {
   },
   CategoryID: {
     type: Sequelize.INTEGER,
-    allowNull:false,
+    allowNull: false,
     references: {
-      model: 'Categories', // name of the referenced model
-      key: 'id', // name of the referenced key
+      model: "Categories", // name of the referenced model
+      key: "id", // name of the referenced key
     },
-    unique:false,
+    unique: false,
   },
   UserID: {
     type: Sequelize.INTEGER,
-    allowNull:false,
+    allowNull: false,
     references: {
-      model: 'Users', // name of the referenced model
-      key: 'id', // name of the referenced key
+      model: "Users", // name of the referenced model
+      key: "id", // name of the referenced key
     },
-    unique:false,
+    unique: false,
   },
 });
 
