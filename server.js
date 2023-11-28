@@ -1,6 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
+
 import { connect, syncronise } from "./config/dbconnection.js";
 dotenv.config();
 
@@ -12,13 +14,13 @@ import NotificationRoutes from "./routes/NotificationsRoutes.js";
 import GoalRouter from "./routes/GoalsRoutes.js";
 
 import "./config/association.js";
-import authorized from "./middlewares/authMiddleware.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static("images"));
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use("/users", UserRoutes);
 app.use("/transactions", TransactionsRoutes);

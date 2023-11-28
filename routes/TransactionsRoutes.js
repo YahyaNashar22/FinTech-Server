@@ -9,14 +9,25 @@ import {
   updateTransactionById,
   deleteTransactionById,
 } from "../controllers/TransactionController.js";
+import { authorized, checkRole } from "../middlewares/auth.js";
 
 const router = express.Router();
 
 // Use the functions in your routes or wherever needed
-router.post("/create",CreatTransaction);
+router.post("/create", CreatTransaction);
 router.get("/read", getAllTransactions);
 router.get("/read/:id", getTransactionById);
-router.put("/update/:id", updateTransactionById);
-router.delete("/delete/:id", deleteTransactionById);
+router.put(
+  "/update/:id",
+  authorized,
+  checkRole(["admin", "manager"]),
+  updateTransactionById
+);
+router.delete(
+  "/delete/:id",
+  authorized,
+  checkRole(["admin", "manager"]),
+  deleteTransactionById
+);
 
 export default router;

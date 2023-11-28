@@ -1,23 +1,24 @@
 import {
-    createGoal,
-    getAllGoals,
-    getOneGoal,
-    deleteGoal,
-    updateGoal
-}from '../controllers/GoalsController.js'
+  createGoal,
+  getAllGoals,
+  getOneGoal,
+  deleteGoal,
+  updateGoal,
+} from "../controllers/GoalsController.js";
+import { authorized, checkRole } from "../middlewares/auth.js";
 
 import express from "express";
 
 const router = express.Router();
 
-router.post("/create", createGoal);
+router.post("/create", authorized, checkRole(["admin", "manager"]), createGoal);
 
 router.get("/getAll", getAllGoals);
 
 router.get("/:id", getOneGoal);
 
-router.put("/:id", updateGoal);
+router.put("/:id", authorized, checkRole(["admin", "manager"]), updateGoal);
 
-router.delete("/:id", deleteGoal);
+router.delete("/:id", authorized, checkRole(["admin", "manager"]), deleteGoal);
 
 export default router;

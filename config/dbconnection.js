@@ -22,7 +22,7 @@ export const connect = async () => {
 
 export const syncronise = async () => {
   try {
-    await sequelize.sync({ alter: true }).then((result) => {
+    await sequelize.sync().then((result) => {
       console.log(result);
     });
   } catch (err) {

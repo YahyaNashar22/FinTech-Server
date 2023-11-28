@@ -1,13 +1,12 @@
 import Users from "../models/users.js";
 import bcryptjs from "bcryptjs";
-import createToken from "../middlewares/token.js";
+import { createToken } from "../utils/token.js";
+import cookieParser from "cookie-parser";
 
 // Create new user
 export const createUser = async (req, res, next) => {
   const { Name, Email, Password, Role } = req.body;
-  // const newX = req.body;
   const profilePicture = req.body.file;
-  // newX.image = profilePicture;
   const salt = await bcryptjs.genSalt();
   const hashedPassword = await bcryptjs.hash(Password, salt);
   try {
@@ -17,11 +16,7 @@ export const createUser = async (req, res, next) => {
       Password: hashedPassword,
       Role,
       Picture: profilePicture,
-      // ...newX,
-      // Password: hashedPassword,
     });
-    const token = createToken(newUser.id);
-    res.cookie("jwt", token);
     return res
       .status(200)
       .json({ message: "user created successfully", user: newUser });
@@ -33,7 +28,8 @@ export const createUser = async (req, res, next) => {
 
 //login fct
 export const login = async (req, res, next) => {
-  const user = await Users.findOne({ where: { Email: req.body.Email } });
+  const { Email, Password } = req.body;
+  const user = await Users.findOne({ where: { Email: Email } });
   if (!user) {
     return res.status(400).json({
       error: "404",
@@ -41,8 +37,10 @@ export const login = async (req, res, next) => {
     });
   } else {
     try {
-      if (await bcryptjs.compare(req.body.password, user.hashedPassword)) {
+      if (await bcryptjs.compare(Password, user.Password)) {
+        const token = createToken(user);
         return res
+          .cookie("access_token", token)
           .status(200)
           .json({ message: "login successfull", user: user });
       } else {
@@ -56,6 +54,15 @@ export const login = async (req, res, next) => {
       });
     }
   }
+};
+
+//logout fct
+
+export const userlogout = (req, res, next) => {
+  return res
+    .clearCookie("access_token")
+    .status(200)
+    .send("successfully logged out");
 };
 
 // Fetch all users
