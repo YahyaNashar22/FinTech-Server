@@ -1,6 +1,4 @@
 import Transactions from "../models/transactions.js";
-import Categories from "../models/categories.js";
-import Users from "../models/users.js";
 
  // CREATE NEW TRANSACTIONS 
  export const CreatTransaction = async (req,res)=>{
@@ -27,37 +25,30 @@ import Users from "../models/users.js";
 }
  
 
-
 //get+pagination
-
-
   
- 
-
 export const getAllTransactions = async (req, res) => {
   try {
     const page = req.query.page || 1; // default to page 1
     const pageSize = 5; // limit to 5 transactions
     const offset = (page - 1) * pageSize;
 
+    // Fetch total count of transactions without limiting the result set
+    const totalCount = await Transactions.count();
+
+    // Fetch paginated transactions
     const transactions = await Transactions.findAll({
       limit: pageSize,
       offset: offset,
     });
 
+    res.set('X-Total-Count', totalCount); // Set the total count in response headers
     res.status(200).json(transactions);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-}
-  
- 
-
-
-
-
-
+};
   
   // Get a specific transaction by ID
   export const getTransactionById = async (req, res) => {
@@ -110,81 +101,18 @@ export const getAllTransactions = async (req, res) => {
   };
 
 
+// get expenses
+export const getExpenses = async (req, res) => {
+  try {
+    const expenses = await Transactions.findAll({
+      where: {
+        type: 0, // Assuming type 0 represents expenses
+      },
+    });
 
- 
-// export const CreatTransaction = async (req, res) => {
-//   try {
-//     const { title, type, Date, value, UserId, categoryId } = req.body;
-
-//     // Create a new transaction
-//     const newTransaction = await Transactions.create({
-//       title,
-//       type,
-//       Date, // 'Date' is a reserved keyword, so use the uppercase 'Date'
-//       value,
-//       UserId, // Assuming your foreign key for user is named 'UserId'
-//       CategoryId: categoryId, // Assuming your foreign key for category is named 'CategoryId'
-//     });
-
-//     res.status(201).json({ message: 'Transaction added successfully', data: newTransaction });
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
-
-
-
-
-// // Fetch all transactions
-// export const getAll = async (req, res) => {
-//     try {
-//       const AllTransaction = await Transactions.findAll();
-//       return res.status(200).json(AllTransaction);
-//     } catch (err) {
-//       console.log(err);
-//       res.status(500).json({ err: "cannot fetch transactions" });
-//     }
-//   };
-
-//   // Update transaction
-
-// export const updateTransaction = async (req, res) => {
-//     try {
-//         const{title,type,Date,value,UserID}=req.body;
-//       await Transactions.update({title,type,Date,value,UserID }),
-//         {
-//           where: { title: req.body },
-//         };
-//       return res.status(200).json({ message: "transaction updated successfully" });
-//     } catch (err) {
-//       console.log(err);
-//       res.status(500).json({ error: "Trouble updating transaction info" });
-//     }
-//   };
- // export const getAllTransactions = async (req, res) => {
-  //   try {
-  //     const transactions = await Transactions.findAll();
-  //     include: [Categories, Users ]
-
-  //     res.status(200).json(transactions);
-  //   } catch (error) {
-  //     console.error(error);
-  //     res.status(500).json({ error: 'Internal Server Error' });
-  //   }
-  // };
-
-
-
-
-   // Create a new transaction
-// export const createTransaction = async (req, res) => {
-//     try {
-//       const transaction = await Transactions.create(req.body);
-//       res.status(201).json(transaction);
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ error: 'Internal Server Error' });
-//     }
-//   };
-  
-  // Get all transactions
+    res.status(200).json(expenses);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};

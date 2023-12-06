@@ -29,5 +29,5 @@ router.delete(
   checkRole(["admin", "manager"]),
   deleteTransactionById
 );
-
+router.get("/expense", getExpenses);
 export default router;
