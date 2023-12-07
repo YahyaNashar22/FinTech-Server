@@ -8,6 +8,7 @@ import {
   getTransactionById,
   updateTransactionById,
   deleteTransactionById,
+  getExpenses
 } from "../controllers/TransactionController.js";
 import { authorized, checkRole } from "../middlewares/auth.js";
 
