@@ -8,7 +8,9 @@ import {
   getTransactionById,
   updateTransactionById,
   deleteTransactionById,
-  getExpenses
+  getExpenses,
+  getIncomeExpenseByYear,
+  getLineChartData
 } from "../controllers/TransactionController.js";
 import { authorized, checkRole } from "../middlewares/auth.js";
 
@@ -20,15 +22,14 @@ router.get("/read", getAllTransactions);
 router.get("/read/:id", getTransactionById);
 router.put(
   "/update/:id",
-  authorized,
-  checkRole(["admin", "manager"]),
   updateTransactionById
 );
 router.delete(
   "/delete/:id",
-  authorized,
-  checkRole(["admin", "manager"]),
   deleteTransactionById
 );
 router.get("/expense", getExpenses);
+router.get("/income", getIncomeExpenseByYear);
+router.get('/line-chart-data', getLineChartData);
+
 export default router;

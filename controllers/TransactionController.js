@@ -102,17 +102,85 @@ export const getAllTransactions = async (req, res) => {
 
 
 // get expenses
+// export const getExpenses = async (req, res) => {
+//   try {
+//     const expenses = await Transactions.findAll({
+//       where: {
+//         type: 0, // Assuming type 0 represents expenses
+//       },
+//     });
+
+//     res.status(200).json(expenses);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
+
 export const getExpenses = async (req, res) => {
   try {
     const expenses = await Transactions.findAll({
+      attributes: ['title', 'value'], // Extracting 'title' and 'value' fields
       where: {
         type: 0, // Assuming type 0 represents expenses
       },
     });
 
-    res.status(200).json(expenses);
+    // Map the expenses to the format expected by the frontend
+    const formattedExpenses = expenses.map((expense) => ({
+      category: expense.title,
+      amount: expense.value,
+    }));
+
+    res.status(200).json(formattedExpenses);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+// Aggregated data by year and type (income/expense)
+export const getIncomeExpenseByYear = async (req, res) => {
+  try {
+    const incomeExpenseData = await Transactions.findAll({
+      attributes: [
+        [Sequelize.fn('YEAR', Sequelize.col('Date')), 'year'],
+        'type',
+        [Sequelize.fn('SUM', Sequelize.col('value')), 'total'],
+      ],
+      where: {
+        type: { [Sequelize.Op.in]: [0, 1] }, // Filter by type (0 for expense, 1 for income)
+      },
+      group: ['year', 'type'],
+    });
+
+    res.status(200).json(incomeExpenseData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
+// Get line chart data based on category
+export const getLineChartData = async (req, res) => {
+  const { category } = req.query;
+
+  try {
+    const lineChartData = await Transactions.findAll({
+      attributes: ['Date', 'value'],
+      where: {
+        category: category,
+      },
+      order: [['Date', 'ASC']], // Order by date in ascending order
+    });
+
+    res.status(200).json(lineChartData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
