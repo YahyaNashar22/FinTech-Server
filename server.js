@@ -14,11 +14,18 @@ import NotificationRoutes from "./routes/NotificationsRoutes.js";
 import GoalRouter from "./routes/GoalsRoutes.js";
 
 import "./config/association.js";
+import { authorized } from "./middlewares/auth.js";
 
 const app = express();
-app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:3000", // Allow only your frontend origin
+  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+  optionsSuccessStatus: 200, // Some legacy browsers choke on 204
+};
+app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.static("images"));
+const staticDirectory = "./images";
+app.use("/images", express.static(staticDirectory));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -28,6 +35,10 @@ app.use("/company", CompanyRoutes);
 app.use("/categories", CategoriesRoutes);
 app.use("/goals", GoalRouter);
 app.use("/Notifications", NotificationRoutes);
+app.get("/auth", authorized, (req, res) => {
+  console.log("first");
+  res.json({ userId: req.id });
+});
 
 app.listen(process.env.PORT, () => {
   setTimeout(connect, 7000);
