@@ -1,4 +1,5 @@
 import Transactions from "../models/transactions.js";
+import { Sequelize } from 'sequelize';
 
  // CREATE NEW TRANSACTIONS 
  export const CreatTransaction = async (req,res)=>{
@@ -178,6 +179,65 @@ export const getLineChartData = async (req, res) => {
     });
 
     res.status(200).json(lineChartData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+// // Aggregated data by month and type (income/expense)
+// export const getIncomeOutcomeByMonth = async (req, res) => {
+//   try {
+//     const incomeOutcomeData = await Transactions.findAll({
+//       attributes: [
+//         [Sequelize.fn('MONTH', Sequelize.col('Date')), 'month'],
+//         'type',
+//         [Sequelize.fn('SUM', Sequelize.col('value')), 'total'],
+//       ],
+//       where: {
+//         type: { [Sequelize.Op.in]: [true, false] }, // Adjusted for boolean values
+//       },
+//       group: ['month', 'type'],
+//     });
+
+//    // Format the data to match the frontend expectations
+// const formattedData = incomeOutcomeData.map(item => ({
+//   month: item.month,
+//   type: item.type ? 'income' : 'expense', // Convert boolean to string
+//   total: item.total,
+// }));
+
+
+//     res.status(200).json(formattedData);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
+
+// Aggregated data by month and type (income/expense) for bar chart
+export const getIncomeOutcomeByMonthForChart = async (req, res) => {
+  try {
+    const incomeOutcomeData = await Transactions.findAll({
+      attributes: [
+        [Sequelize.fn('MONTH', Sequelize.col('Date')), 'month'],
+        'type',
+        [Sequelize.fn('SUM', Sequelize.col('value')), 'total'],
+      ],
+      where: {
+        type: { [Sequelize.Op.in]: [true, false] }, // Adjusted for boolean values
+      },
+      group: ['month', 'type'],
+    });
+
+    // Format the data to match the frontend expectations
+    const formattedData = incomeOutcomeData.map(item => ({
+      month: item.month,
+      type: item.type ? 'income' : 'expense', // Convert boolean to string
+      total: item.total,
+    }));
+
+    res.status(200).json(formattedData);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
