@@ -1,7 +1,10 @@
 import jwt from "jsonwebtoken";
 
 export const createToken = (user) => {
-  return jwt.sign({ id: user.id, Role: user.Role }, process.env.SECRET_TOKEN);
+  return jwt.sign(
+    { id: user.id, Role: user.Role, Picture: user.Picture },
+    process.env.SECRET_TOKEN
+  );
 };
 export const verifyToken = (token) => {
   try {

@@ -13,12 +13,12 @@ import { authorized, checkRole } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.get("/getAll", getAll);
+router.get("/getAll", authorized, checkRole(["admin", "manager"]), getAll);
 router.get("/:id", getOne);
-router.post("/userlogout", userlogout);
+router.post("/userlogout", authorized, userlogout);
 router.post("/create", uploadImage.single("Picture"), createUser);
 router.post("/login", login);
-router.put("/:id", uploadImage.single("Picture"), updateUser);
+router.put("/:id", authorized, uploadImage.single("Picture"), updateUser);
 router.delete("/:id", authorized, checkRole(["admin", "manager"]), deleteUser);
 
 export default router;

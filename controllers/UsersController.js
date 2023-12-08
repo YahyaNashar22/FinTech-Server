@@ -1,12 +1,14 @@
 import Users from "../models/users.js";
 import bcryptjs from "bcryptjs";
-import { createToken } from "../utils/token.js";
-import cookieParser from "cookie-parser";
+import { createToken, verifyToken } from "../utils/token.js";
+import path from "path";
 
 // Create new user
 export const createUser = async (req, res, next) => {
   const { Name, Email, Password, Role } = req.body;
-  const profilePicture = req.body.file;
+  const Picture = req.file.filename;
+
+  // return res.json({ body: req.body, file: req.file });
   const salt = await bcryptjs.genSalt();
   const hashedPassword = await bcryptjs.hash(Password, salt);
   try {
@@ -15,7 +17,7 @@ export const createUser = async (req, res, next) => {
       Email,
       Password: hashedPassword,
       Role,
-      Picture: profilePicture,
+      Picture: Picture,
     });
     return res
       .status(200)
@@ -31,7 +33,7 @@ export const login = async (req, res, next) => {
   const { Email, Password } = req.body;
   const user = await Users.findOne({ where: { Email: Email } });
   if (!user) {
-    return res.status(400).json({
+    return res.status(401).json({
       error: "404",
       message: "user not found",
     });
@@ -39,12 +41,17 @@ export const login = async (req, res, next) => {
     try {
       if (await bcryptjs.compare(Password, user.Password)) {
         const token = createToken(user);
-        return res
-          .cookie("access_token", token)
+        const decoded = verifyToken(token);
+        res
+          .cookie("access_token", token, {
+            secure: true,
+            httpOnly: true,
+            sameSite: "None",
+          })
           .status(200)
-          .json({ message: "login successfull", user: user });
+          .json({ message: "login successfull", user: decoded });
       } else {
-        res.status(500).json({
+        res.status(401).json({
           message: "wrong password",
         });
       }
@@ -59,6 +66,7 @@ export const login = async (req, res, next) => {
 //logout fct
 
 export const userlogout = (req, res, next) => {
+  console.log("cookie cleared");
   return res
     .clearCookie("access_token")
     .status(200)
