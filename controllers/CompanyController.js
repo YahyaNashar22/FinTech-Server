@@ -5,6 +5,7 @@ import Company from "../models/company.js";
 export const createCompanyInfo = async (req, res) => {
   const { 
     Name,
+    // Email,
     Description,
     Capital,
     Updated_Capital,
@@ -14,10 +15,12 @@ export const createCompanyInfo = async (req, res) => {
     Website 
   } = req.body;
 
+  const logo = req.file.filename;
   try {
     const newCompanyInfo = await Company.create({ 
       Name,
-      Logo: req.file.filename,
+      Logo: logo,
+      // Email,
       Description,
       Capital,
       Updated_Capital,
@@ -54,6 +57,7 @@ export const getCompanyInfo = async (req, res) => {
 export const updateCompanyInfo = async (req, res) => {
   const {
     Name,
+    // Email,
     Description,
     Capital,
     Updated_Capital,
@@ -63,7 +67,7 @@ export const updateCompanyInfo = async (req, res) => {
     Website,
   } = req.body;
 
-  req.body.logo = req.file.path;
+  const logo = req.file.filename;
   try {
     let companyInfo = await Company.findOne();
     if (!companyInfo) {
@@ -73,7 +77,8 @@ export const updateCompanyInfo = async (req, res) => {
     }
     companyInfo = await companyInfo.update({
       Name,
-      Logo: req.file ? req.file.filename : companyInfo.Logo,
+      Logo: logo,
+      Email,
       Description,
       Capital,
       Updated_Capital,
@@ -87,5 +92,25 @@ export const updateCompanyInfo = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, error: "Error" });
+  }
+};
+
+// delete
+export const deleteCompanyInfo = async (req, res) => {
+  try {
+    const company = await Company.findOne();
+
+    if (!company) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Company information not found" });
+    }
+
+    await company.destroy();
+
+    res.status(200).json({ success: true, message: "Company information deleted" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Error deleting company information" });
   }
 };

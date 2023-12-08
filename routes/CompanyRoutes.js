@@ -3,8 +3,9 @@ import {
   createCompanyInfo,
   getCompanyInfo,
   updateCompanyInfo,
+  deleteCompanyInfo,
 } from "../controllers/CompanyController.js";
-import uploadImage from "../middlewares/multer.js";
+import uploadImage from "../middlewares/multer";
 import { authorized, checkRole } from "../middlewares/auth.js";
 
 const router = express.Router();
@@ -26,5 +27,12 @@ router.put(
   uploadImage.single("logo"),
   updateCompanyInfo
 ); // Route to update the company Info
+
+router.delete(
+  "/delete",
+  authorized,
+  checkRole(["admin"]),
+  deleteCompanyInfo
+);
 
 export default router;
