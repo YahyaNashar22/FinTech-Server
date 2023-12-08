@@ -8,6 +8,7 @@ import {
   getTransactionById,
   updateTransactionById,
   deleteTransactionById,
+  getExpenses
 } from "../controllers/TransactionController.js";
 import { authorized, checkRole } from "../middlewares/auth.js";
 
@@ -29,5 +30,5 @@ router.delete(
   checkRole(["admin", "manager"]),
   deleteTransactionById
 );
-
+router.get("/expense", getExpenses);
 export default router;
