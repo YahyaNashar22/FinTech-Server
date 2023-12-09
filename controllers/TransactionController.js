@@ -102,22 +102,7 @@ export const getAllTransactions = async (req, res) => {
   };
 
 
-// get expenses
-// export const getExpenses = async (req, res) => {
-//   try {
-//     const expenses = await Transactions.findAll({
-//       where: {
-//         type: 0, // Assuming type 0 represents expenses
-//       },
-//     });
-
-//     res.status(200).json(expenses);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// };
-
+//FETCH DATA FOR THE PIE 
 export const getExpenses = async (req, res) => {
   try {
     const expenses = await Transactions.findAll({
@@ -141,106 +126,48 @@ export const getExpenses = async (req, res) => {
 };
 
 
-// Aggregated data by year and type (income/expense)
-export const getIncomeExpenseByYear = async (req, res) => {
+
+// Fetch dynamic data for the bar chart
+export const getBarChartData = async (req, res) => {
   try {
-    const incomeExpenseData = await Transactions.findAll({
+    // Aggregate income and expenses by year in the database
+    const aggregatedData = await Transactions.findAll({
       attributes: [
         [Sequelize.fn('YEAR', Sequelize.col('Date')), 'year'],
-        'type',
-        [Sequelize.fn('SUM', Sequelize.col('value')), 'total'],
+        [Sequelize.fn('SUM', Sequelize.literal('CASE WHEN type = 1 THEN value ELSE 0 END')), 'income'],
+        [Sequelize.fn('SUM', Sequelize.literal('CASE WHEN type = 0 THEN value ELSE 0 END')), 'expense'],
       ],
-      where: {
-        type: { [Sequelize.Op.in]: [0, 1] }, // Filter by type (0 for expense, 1 for income)
-      },
-      group: ['year', 'type'],
+      group: [Sequelize.fn('YEAR',Sequelize.col('Date'))],
+      order: [[Sequelize.fn('YEAR', Sequelize.col('Date')), 'ASC']], // Order by year in ascending order
+      raw: true,
     });
 
-    res.status(200).json(incomeExpenseData);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
-
-
-
-// Get line chart data based on category
-export const getLineChartData = async (req, res) => {
-  const { category } = req.query;
-
-  try {
-    const lineChartData = await Transactions.findAll({
-      attributes: ['Date', 'value'],
-      where: {
-        category: category,
+    // Prepare data for the frontend chart
+    const chartData = {
+      options: {
+        colors: ['#4DA192', '#14EBBE'],
+        chart: { id: 'basic-bar' },
+        xaxis: {
+          categories: aggregatedData.map((data) => data.year),
+        },
       },
-      order: [['Date', 'ASC']], // Order by date in ascending order
-    });
-
-    res.status(200).json(lineChartData);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
-
-// // Aggregated data by month and type (income/expense)
-// export const getIncomeOutcomeByMonth = async (req, res) => {
-//   try {
-//     const incomeOutcomeData = await Transactions.findAll({
-//       attributes: [
-//         [Sequelize.fn('MONTH', Sequelize.col('Date')), 'month'],
-//         'type',
-//         [Sequelize.fn('SUM', Sequelize.col('value')), 'total'],
-//       ],
-//       where: {
-//         type: { [Sequelize.Op.in]: [true, false] }, // Adjusted for boolean values
-//       },
-//       group: ['month', 'type'],
-//     });
-
-//    // Format the data to match the frontend expectations
-// const formattedData = incomeOutcomeData.map(item => ({
-//   month: item.month,
-//   type: item.type ? 'income' : 'expense', // Convert boolean to string
-//   total: item.total,
-// }));
-
-
-//     res.status(200).json(formattedData);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// };
-
-// Aggregated data by month and type (income/expense) for bar chart
-export const getIncomeOutcomeByMonthForChart = async (req, res) => {
-  try {
-    const incomeOutcomeData = await Transactions.findAll({
-      attributes: [
-        [Sequelize.fn('MONTH', Sequelize.col('Date')), 'month'],
-        'type',
-        [Sequelize.fn('SUM', Sequelize.col('value')), 'total'],
+      series: [
+        {
+          name: 'Income',
+          data: aggregatedData.map((data) => data.income),
+        },
+        {
+          name: 'Expense',
+          data: aggregatedData.map((data) => data.expense),
+        },
       ],
-      where: {
-        type: { [Sequelize.Op.in]: [true, false] }, // Adjusted for boolean values
-      },
-      group: ['month', 'type'],
-    });
+    };
 
-    // Format the data to match the frontend expectations
-    const formattedData = incomeOutcomeData.map(item => ({
-      month: item.month,
-      type: item.type ? 'income' : 'expense', // Convert boolean to string
-      total: item.total,
-    }));
-
-    res.status(200).json(formattedData);
+    res.status(200).json(chartData);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
