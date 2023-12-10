@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import http from "http";
+import { Server } from "socket.io";
 
 import { connect, syncronise } from "./config/dbconnection.js";
 dotenv.config();
@@ -22,6 +24,26 @@ const corsOptions = {
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   optionsSuccessStatus: 200, // Some legacy browsers choke on 204
 };
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("User Connected");
+  socket.on("send_message", (data) => {
+    socket.emit("receive_message", data);
+  });
+  socket.on("disconnection", () => {
+    socket.disconnect();
+    console.log("bye bye!");
+  });
+});
+
 app.use(cors(corsOptions));
 app.use(express.json());
 const staticDirectory = "./images";
@@ -40,7 +62,7 @@ app.get("/auth", authorized, (req, res) => {
   res.json({ userId: req.id });
 });
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   setTimeout(connect, 7000);
   setTimeout(syncronise, 7000);
   console.log(`server is running on port ${process.env.PORT}`);
