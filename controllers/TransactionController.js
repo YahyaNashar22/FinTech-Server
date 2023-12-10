@@ -170,4 +170,90 @@ export const getBarChartData = async (req, res) => {
   }
 };
 
+//just expense 
+export const getExpenseForLineChart = async (req, res) => {
+  try {
+    console.log('Executing getExpenseForLineChart');
 
+    const expenseData = await Transactions.findAll({
+      attributes: [
+        [Sequelize.fn('YEAR', Sequelize.col('Date')), 'year'],
+        [Sequelize.fn('SUM', Sequelize.literal('CASE WHEN type = 0 THEN value ELSE 0 END')), 'expense'],
+      ],
+      group: [Sequelize.fn('YEAR', Sequelize.col('Date'))],
+      order: [[Sequelize.fn('YEAR', Sequelize.col('Date')), 'ASC']],
+      raw: true,
+    });
+
+    console.log('Expense Data:', expenseData);
+
+    const lineChartData = {
+      options: {
+        colors: ['#14EBBE'],
+        chart: { id: 'basic-line' },
+        xaxis: {
+          categories: expenseData.map((data) => data.year),
+        },
+      },
+      series: [
+        {
+          name: 'Expense',
+          data: expenseData.map((data) => data.expense),
+        },
+      ],
+    };
+
+    res.status(200).json(lineChartData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
+// Fetch dynamic data for the line chart
+export const getLineChartData = async (req, res) => {
+  try {
+    // Aggregate income and expenses by month in the database
+    const aggregatedData = await Transactions.findAll({
+      attributes: [
+        [Sequelize.fn('MONTHNAME', Sequelize.col('Date')), 'month'],
+        [Sequelize.fn('SUM', Sequelize.literal('CASE WHEN type = 1 THEN value ELSE 0 END')), 'income'],
+        [Sequelize.fn('SUM', Sequelize.literal('CASE WHEN type = 0 THEN value ELSE 0 END')), 'expense'],
+        [Sequelize.fn('MIN', Sequelize.col('Date')), 'minDate'], // Get the minimum date for ordering
+      ],
+      group: [Sequelize.fn('MONTHNAME', Sequelize.col('Date'))],
+      order: [
+        [Sequelize.col('minDate'), 'ASC'], // Order by the minimum date in ascending order
+      ],
+      raw: true,
+    });
+
+    // Prepare data for the frontend chart
+    const chartData = {
+      options: {
+        colors: ['#4DA192', '#14EBBE'],
+        chart: { id: 'basic-bar' },
+        xaxis: {
+          categories: aggregatedData.map((data) => data.month),
+        },
+      },
+      series: [
+        {
+          name: 'Income',
+          data: aggregatedData.map((data) => Number(data.income)),
+        },
+        {
+          name: 'Expense',
+          data: aggregatedData.map((data) => Number(data.expense)),
+        },
+      ],
+    };
+
+    res.status(200).json(chartData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
