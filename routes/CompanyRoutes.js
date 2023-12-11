@@ -5,7 +5,7 @@ import {
   updateCompanyInfo,
   deleteCompanyInfo,
 } from "../controllers/CompanyController.js";
-import uploadImage from "../middlewares/multer";
+import uploadImage from "../middlewares/multer.js";
 import { authorized, checkRole } from "../middlewares/auth.js";
 
 const router = express.Router();
