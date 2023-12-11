@@ -1,5 +1,5 @@
 import Transactions from "../models/transactions.js";
-import { Sequelize } from 'sequelize';
+import { Sequelize ,Op} from 'sequelize';
 
  // CREATE NEW TRANSACTIONS 
 export const CreateTransaction = async (req, res) => {
@@ -250,6 +250,99 @@ export const getLineChartData = async (req, res) => {
         },
       ],
     };
+
+    res.status(200).json(chartData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+// Fetch dynamic data for the Material-UI chart
+export const getIncomeAreaChartData = async (req, res) => {
+  try {
+    // Modify this part based on your database schema and model
+    const aggregatedData = await Transactions.findAll({
+      attributes: [
+        [Sequelize.fn('MONTHNAME', Sequelize.col('Date')), 'month'],
+        [Sequelize.fn('SUM', Sequelize.literal('CASE WHEN type = 1 THEN value ELSE 0 END')), 'income'],
+        [Sequelize.fn('SUM', Sequelize.literal('CASE WHEN type = 0 THEN value ELSE 0 END')), 'expense'],
+        [Sequelize.fn('MIN', Sequelize.col('Date')), 'minDate'],
+      ],
+      group: [Sequelize.fn('MONTHNAME', Sequelize.col('Date'))],
+      order: [
+        [Sequelize.col('minDate'), 'ASC'],
+      ],
+      raw: true,
+    });
+
+    // Prepare data for the frontend chart
+    const chartData = {
+      options: {
+        colors: ['#4DA192', '#14EBBE'],
+        chart: { id: 'income-area-chart' },
+        xaxis: {
+          categories: aggregatedData.map((data) => data.month),
+        },
+      },
+      series: [
+        {
+          name: 'Income',
+          data: aggregatedData.map((data) => Number(data.income)),
+        },
+        {
+          name: 'Expense',
+          data: aggregatedData.map((data) => Number(data.expense)),
+        },
+      ],
+    };
+
+    res.status(200).json(chartData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
+// ... (previous imports)
+
+export const getWeeklyBarChartData = async (req, res) => {
+  try {
+    // Aggregate income by week in the database
+    const aggregatedData = await Transactions.findAll({
+      attributes: [
+        [Sequelize.fn('WEEKDAY', Sequelize.col('Date')), 'weekday'], // Use WEEKDAY instead of WEEK
+        [Sequelize.fn('SUM', Sequelize.literal('CASE WHEN type = 1 THEN value ELSE 0 END')), 'income'],
+      ],
+      group: [Sequelize.fn('WEEKDAY', Sequelize.col('Date'))],
+      order: [[Sequelize.fn('WEEKDAY', Sequelize.col('Date')), 'ASC']], // Order by weekday in ascending order
+      raw: true,
+    });
+
+    // Prepare data for the frontend chart
+    const chartData = {
+      options: {
+        colors: ['#4DA192'],
+        chart: { id: 'basic-bar' },
+        xaxis: {
+          categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], // Days of the week
+        },
+      },
+      series: [
+        {
+          name: 'Income',
+          data: [0, 0, 0, 0, 0, 0, 0], // Initialize with zeros for all days
+        },
+      ],
+    };
+
+    // Map the aggregated data to the correct day in the x-axis
+    aggregatedData.forEach((data) => {
+      chartData.series[0].data[data.weekday] = data.income;
+    });
 
     res.status(200).json(chartData);
   } catch (error) {

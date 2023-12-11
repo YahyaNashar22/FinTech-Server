@@ -10,7 +10,9 @@ import {
   deleteTransactionById,
   getExpenses,
   getBarChartData,
-getLineChartData
+getLineChartData,
+getIncomeAreaChartData,
+getWeeklyBarChartData
 } from "../controllers/TransactionController.js";
 import { authorized, checkRole } from "../middlewares/auth.js";
 
@@ -35,6 +37,7 @@ router.get('/bymonth',  getBarChartData );
 router.get('/LineChart',getLineChartData)
 // router.get('/byLine',getExpenseForLineChart)
 
-
+router.get('/IncomeAreaChart',getIncomeAreaChartData)
+router.get('/byweek',getWeeklyBarChartData)
 
 export default router;
