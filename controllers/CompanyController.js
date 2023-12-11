@@ -1,8 +1,11 @@
 import Company from "../models/company.js";
+import path from 'path';
 
 // To create a company info
 
 export const createCompanyInfo = async (req, res) => {
+  console.log('Req Body:', req.body);
+  console.log('Req File:', req.file);
   const { 
     Name,
     // Email,
@@ -15,12 +18,11 @@ export const createCompanyInfo = async (req, res) => {
     Website 
   } = req.body;
 
-  const logo = req.file.filename;
+  const logooo = req.file.filename;
   try {
     const newCompanyInfo = await Company.create({ 
       Name,
-      Logo: logo,
-      // Logo,
+      Logo: logooo,
       // Email,
       Description,
       Capital,
@@ -59,7 +61,6 @@ export const updateCompanyInfo = async (req, res) => {
   const {
     Name,
     // Email,
-    // Logo,
     Description,
     Capital,
     Updated_Capital,
@@ -69,7 +70,8 @@ export const updateCompanyInfo = async (req, res) => {
     Website,
   } = req.body;
 
-  req.body.image = req.file.path;
+  const logooo = req.file.filename;
+  // req.body.image = req.file.path;
   try {
     let companyInfo = await Company.findOne();
     if (!companyInfo) {
@@ -79,8 +81,7 @@ export const updateCompanyInfo = async (req, res) => {
     }
     companyInfo = await companyInfo.update({
       Name,
-      // Logo: logo,
-      Logo: req.file.filename,
+      Logo: logooo,
       // Email,
       Description,
       Capital,
