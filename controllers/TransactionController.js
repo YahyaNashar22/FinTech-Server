@@ -2,28 +2,28 @@ import Transactions from "../models/transactions.js";
 import { Sequelize } from 'sequelize';
 
  // CREATE NEW TRANSACTIONS 
- export const CreatTransaction = async (req,res)=>{
-  const{title,type,Date,value,UserID,CategoryID}=req.body;
-  try{
-      const newtrans=await Transactions.create({
-          title,
-          type,
-          Date,
-          value,
-          UserID,
-          CategoryID
-          
-      });
-  
-       res.status(200).json({message:"transaction created successfully", transaction:newtrans})
+export const CreateTransaction = async (req, res) => {
+  const { title, type, Date, value, UserID, CategoryID } = req.body;
+  try {
+    const newTrans = await Transactions.create({
+      title,
+      type,
+      Date,
+      value,
+      UserID,
+      CategoryID,
+    });
 
-
+    res.status(200).json({
+      message: "Transaction created successfully",
+      transaction: newTrans,
+    });
+  } catch (err) {
+    console.error('Error creating transaction:', err.message);
+    res.status(500).json({ error: "Transaction couldn't be created" });
   }
-  catch (err) {
-      console.log(err);
-      res.status(500).json({ error: "transaction couldn't be created" });
-    }
-}
+};
+
  
 
 //get+pagination

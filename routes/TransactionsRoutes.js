@@ -3,7 +3,7 @@
 import express from "express";
 
 import {
-  CreatTransaction,
+  CreateTransaction,
   getAllTransactions,
   getTransactionById,
   updateTransactionById,
@@ -17,7 +17,7 @@ import { authorized, checkRole } from "../middlewares/auth.js";
 const router = express.Router();
 
 // Use the functions in your routes or wherever needed
-router.post("/create", CreatTransaction);
+router.post("/create", CreateTransaction);
 router.get("/read", getAllTransactions);
 router.get("/read/:id", getTransactionById);
 router.put(
