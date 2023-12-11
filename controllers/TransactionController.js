@@ -23,7 +23,18 @@ import Transactions from "../models/transactions.js";
       res.status(500).json({ error: "transaction couldn't be created" });
     }
 }
- 
+
+
+// To get all Transactions
+
+export const getAllExistedTransactions = async (req, res) => {
+  try {
+    const AllTransactions = await Transactions.findAll();
+    res.status(200).json({ success: true, data: AllTransactions });
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Server Error" });
+  }
+};
 
 //get+pagination
   

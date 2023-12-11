@@ -20,6 +20,7 @@ export const createCompanyInfo = async (req, res) => {
     const newCompanyInfo = await Company.create({ 
       Name,
       Logo: logo,
+      // Logo,
       // Email,
       Description,
       Capital,
@@ -58,6 +59,7 @@ export const updateCompanyInfo = async (req, res) => {
   const {
     Name,
     // Email,
+    // Logo,
     Description,
     Capital,
     Updated_Capital,
@@ -67,7 +69,7 @@ export const updateCompanyInfo = async (req, res) => {
     Website,
   } = req.body;
 
-  const logo = req.file.filename;
+  req.body.image = req.file.path;
   try {
     let companyInfo = await Company.findOne();
     if (!companyInfo) {
@@ -77,8 +79,9 @@ export const updateCompanyInfo = async (req, res) => {
     }
     companyInfo = await companyInfo.update({
       Name,
-      Logo: logo,
-      Email,
+      // Logo: logo,
+      Logo: req.file.filename,
+      // Email,
       Description,
       Capital,
       Updated_Capital,
