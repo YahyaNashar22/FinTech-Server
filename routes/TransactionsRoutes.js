@@ -5,6 +5,7 @@ import express from "express";
 import {
   CreatTransaction,
   getAllTransactions,
+  getAllExistedTransactions,
   getTransactionById,
   updateTransactionById,
   deleteTransactionById,
@@ -17,6 +18,9 @@ const router = express.Router();
 // Use the functions in your routes or wherever needed
 router.post("/create", CreatTransaction);
 router.get("/read", getAllTransactions);
+
+router.get("/readAll", getAllExistedTransactions);
+
 router.get("/read/:id", getTransactionById);
 router.put(
   "/update/:id",

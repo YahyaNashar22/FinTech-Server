@@ -10,13 +10,19 @@ import { authorized, checkRole } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.post("/create", authorized, checkRole(["admin"]), createCompanyInfo); // Route To create the company info
+router.post(
+  "/create",
+  authorized,
+  checkRole(["admin"]),
+  uploadImage.single("Logo"),
+  createCompanyInfo
+); // Route To create the company info
 
 router.get(
   "/info",
   authorized,
   checkRole(["admin"]),
-  uploadImage.single("logo"),
+  uploadImage.single("Logo"),
   getCompanyInfo
 ); // Route to get the company Info
 
@@ -24,7 +30,7 @@ router.put(
   "/update",
   authorized,
   checkRole(["admin"]),
-  uploadImage.single("logo"),
+  uploadImage.single("Logo"),
   updateCompanyInfo
 ); // Route to update the company Info
 
