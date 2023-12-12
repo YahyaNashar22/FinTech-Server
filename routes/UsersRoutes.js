@@ -13,7 +13,9 @@ import { authorized, checkRole } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.get("/getAll", authorized, checkRole(["admin", "financial manager"]), getAll);
+router.get("/getAll",
+  // authorized, checkRole(["admin","financial manager"]), 
+    getAll);
 router.get("/:id", getOne);
 router.post("/userlogout", authorized, userlogout);
 router.post("/create", uploadImage.single("Picture"), createUser);
